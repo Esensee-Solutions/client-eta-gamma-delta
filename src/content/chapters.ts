@@ -16,8 +16,8 @@ export const ZONAS = [
   { name: 'Kappa', place: 'Arecibo', year: 1963 },
   { name: 'Gamma', place: 'San Germán', year: 1966 },
   { name: 'Epsilon', place: 'Yauco', year: 1970 },
-  { name: 'Omega', place: 'Orlando, Florida', year: 2007 },
-  { name: 'Tau', place: 'Tampa, Florida', year: 2015 },
+  { name: 'Omega', place: 'Orlando', year: 2007, florida: true },
+  { name: 'Tau', place: 'Tampa', year: 2015, florida: true },
 ];
 
 /* Each line's text is the copy key home.history.<year>. */

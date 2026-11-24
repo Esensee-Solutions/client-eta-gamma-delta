@@ -236,3 +236,69 @@ img.avatar { object-fit: cover; background: var(--purple-lt); }
 .visually-hidden:focus-visible + label { outline: 3px solid var(--gold); outline-offset: 2px; }
 .row-who { display: flex; align-items: center; gap: .75rem; min-width: 0; }
 .row-who .avatar { width: 42px; height: 42px; font-size: 1rem; }
+
+/* ---------- Homepage, second pass ---------- */
+.hero { display: flex; flex-direction: column; min-height: min(100svh, 62rem); padding-bottom: 0; }
+.hero-body { flex: 1; justify-content: center; padding-bottom: 3rem; }
+.stats { position: relative; display: grid; grid-template-columns: repeat(2, 1fr); max-width: 68rem; width: 100%; margin: 0 auto;
+  border-top: 1px solid rgb(255 255 255 / .16); }
+@media (min-width: 760px) { .stats { grid-template-columns: repeat(4, 1fr); } }
+.stats > div { padding: 1.3rem .75rem 1.5rem; text-align: center; }
+.stats > div + div { border-left: 1px solid rgb(255 255 255 / .12); }
+@media (max-width: 759px) { .stats > div:nth-child(3) { border-left: 0; } .stats > div:nth-child(n+3) { border-top: 1px solid rgb(255 255 255 / .12); } }
+.stats dd { margin: 0; font: 600 clamp(1.9rem, 5vw, 2.6rem)/1 var(--serif); color: var(--gold-br); order: -1; }
+.stats > div { display: flex; flex-direction: column; gap: .35rem; }
+.stats dt { font: 600 .74rem var(--sans); letter-spacing: .14em; text-transform: uppercase; color: #cbbde0; }
+
+.history-intro { position: relative; }
+@media (min-width: 860px) { .history-intro { position: sticky; top: 2rem; } }
+.big-year { margin: 0 0 -.4rem; font: 700 clamp(5rem, 16vw, 9.5rem)/.85 var(--serif); letter-spacing: -.02em;
+  color: transparent; -webkit-text-stroke: 1.5px var(--gold); opacity: .9; }
+.timeline li { padding-bottom: 1.6rem; }
+.timeline li > span:last-child { font-size: 1.05rem; }
+.timeline .year { font-size: 1.75rem; }
+
+.zona-group + .zona-group { margin-top: 1.1rem; }
+.zona-where { margin: 0 0 .5rem; font: 600 .76rem var(--sans); letter-spacing: .16em; text-transform: uppercase; color: var(--gold-ink); }
+.group-card.zona { padding: .75rem 1rem; border-left: 3px solid var(--gold); }
+.group-card.zona strong { font-size: 1.15rem; }
+
+.invite .ticks { margin: 1.5rem 0 1.75rem; }
+.invite .eyebrow { justify-content: flex-start; }
+.phone { margin: 0 auto; display: flex; flex-direction: column; align-items: center; gap: .9rem; }
+.phone figcaption { font-size: .88rem; color: #bfb0d6; }
+.phone-frame { width: min(300px, 82vw); border-radius: 38px; padding: 10px; background: #0f0620;
+  box-shadow: 0 0 0 1px rgb(255 255 255 / .12), 0 30px 60px -20px rgb(0 0 0 / .6), 0 0 80px -20px rgb(226 193 90 / .25);
+  transform: rotate(-2deg); }
+.phone-top { display: flex; align-items: center; gap: .5rem; padding: .7rem .8rem; border-radius: 28px 28px 0 0;
+  background: linear-gradient(160deg, var(--purple), var(--purple-dk)); color: #fff; font: 600 .95rem var(--serif); }
+.phone-top .badge { display: grid; place-items: center; width: 26px; height: 26px; border-radius: 7px; border: 1px solid rgb(226 193 90 / .5);
+  color: var(--gold-br); font: 700 .62rem var(--serif); }
+.phone-screen { background: var(--bg); border-radius: 0 0 28px 28px; padding: .8rem .7rem 1rem; display: grid; gap: .5rem; color: var(--ink); }
+.phone-title { margin: 0; font: 600 1.35rem var(--serif); color: var(--purple-dk); }
+.phone-search { margin: 0 0 .1rem; padding: .45rem .7rem; border: 1px solid var(--line); border-radius: 9px; background: #fff; font-size: .72rem; color: var(--muted); }
+.phone-card { display: flex; gap: .6rem; align-items: center; background: #fff; border: 1px solid var(--line); border-radius: 11px; padding: .55rem .6rem; }
+.phone-card .avatar { width: 36px; height: 36px; font-size: .8rem; box-shadow: 0 0 0 1.5px #fff, 0 0 0 3px var(--gold); }
+.phone-card .who { font-size: .66rem; gap: .12rem; }
+.phone-card .who strong { font-size: .86rem; }
+.phone-card .pill { font-size: .56rem; padding: .2rem .4rem; }
+
+.motto-band { text-align: center; padding: 4.5rem 1.25rem; background:
+  radial-gradient(40rem 14rem at 50% 0%, rgb(201 162 39 / .14), transparent 70%), var(--gold-lt); }
+.motto-big { margin: 0; font: italic 600 clamp(2.6rem, 9vw, 5rem)/1 var(--serif); color: var(--purple-dk); }
+.motto-meaning { margin: .9rem auto 0; max-width: 30rem; color: var(--gold-ink); font-size: 1.05rem; }
+
+.closing { text-align: center; padding: 3.5rem 1.25rem 1rem; }
+.closing-mark { margin: 0; font: 700 2.4rem var(--serif); letter-spacing: .12em; color: var(--gold); }
+.closing-name { margin: .3rem 0 .4rem; font: 600 1.2rem var(--serif); color: var(--purple-dk); }
+.closing-cipr { margin: 0 0 1rem; font-size: .9rem; color: var(--muted); }
+.closing-links { display: flex; flex-wrap: wrap; justify-content: center; gap: .4rem 1.5rem; font-weight: 600; margin: 0; }
+footer { border-top: 0; }
+.hero-bar { width: 100%; }
+.big-year { margin: 0 0 .9rem; }
+/* Cormorant's numbers dip below the line by default (old-style); dates and counts stand on it. */
+.big-year, .stats dd, .timeline .year, .group-card .since { font-variant-numeric: lining-nums; }
+.big-year { margin-bottom: .4rem; }
+.hero { min-height: min(calc(100svh - 2.2rem), 62rem); }
+.hero-bar { margin-bottom: 1.5rem; }
+.hero-body { padding-bottom: 2rem; }

@@ -11,6 +11,19 @@ interface Props { lang: Lang }
 const { lang } = Astro.props;
 const t = useT(lang);
 const since = (year: number) => t('home.chapters.since').replace('{year}', String(year));
+const zonas = [
+  { title: t('home.zonas.pr'), list: ZONAS.filter((z) => !('florida' in z)) },
+  { title: t('home.zonas.fl'), list: ZONAS.filter((z) => 'florida' in z) },
+];
+const statusOf = (s: 'activa' | 'alumna') => t(`dir.status.${s}`);
+
+/* The phone in the directory section: made-up sisters drawn with the directory's own styles. */
+const mock = [
+  { initials: 'CR', hue: 40, name: 'Camila Rivera Ortiz', group: 'Capítulo Beta', zona: false, cargo: '', line: `Otoño 2024 · ${statusOf('activa')}` },
+  { initials: 'MV', hue: 200, name: 'Marisol Vélez Santiago', group: 'Zona Alpha', zona: true, cargo: 'Presidenta', line: 'Primavera 2009 · San Juan' },
+  { initials: 'NM', hue: 120, name: 'Natalia Morales Ramos', group: 'Zona Omega', zona: true, cargo: '', line: 'Primavera 2013 · Orlando' },
+  { initials: 'AT', hue: 300, name: 'Andrea Torres Medina', group: 'Capítulo Beta', zona: false, cargo: 'Presidenta', line: `Primavera 2024 · ${statusOf('activa')}` },
+];
 ---
 {DEMO && <p class="demo-ribbon">{t('home.demo')}</p>}
 
@@ -30,12 +43,18 @@ const since = (year: number) => t('home.chapters.since').replace('{year}', Strin
     </div>
     <p class="hero-note">{t('home.private')}</p>
   </div>
+  <dl class="stats">
+    <div><dt>{t('home.stat.founded')}</dt><dd>1928</dd></div>
+    <div><dt>{t('home.stat.active')}</dt><dd>{ACTIVE.length}</dd></div>
+    <div><dt>{t('home.stat.zonas')}</dt><dd>{ZONAS.length}</dd></div>
+    <div><dt>{t('home.stat.where')}</dt><dd>{t('home.stat.where.short')}</dd></div>
+  </dl>
 </section>
 
-<section class="band">
+<section class="band history">
   <div class="wrap two">
-    <div>
-      <p class="eyebrow dark"><span>1928</span></p>
+    <div class="history-intro">
+      <p class="big-year" aria-hidden="true">1928</p>
       <h2>{t('home.history.title')}</h2>
       <p class="lead">{t('home.history.lead')}</p>
     </div>
@@ -49,6 +68,7 @@ const since = (year: number) => t('home.chapters.since').replace('{year}', Strin
 
 <section class="band soft" id="capitulos">
   <div class="wrap">
+    <p class="eyebrow dark"><span>ΗΓΔ</span></p>
     <h2>{t('home.chapters.title')}</h2>
     <p class="lead">{t('home.chapters.lead')}</p>
     <div class="groups">
@@ -65,11 +85,16 @@ const since = (year: number) => t('home.chapters.since').replace('{year}', Strin
       </div>
       <div>
         <h3>{t('home.chapters.zonas')}</h3>
-        <ul class="group-list zonas">
-          {ZONAS.map((z) => (
-            <li class="group-card"><span><strong>Zona {z.name}</strong><span>{z.place}</span><span class="since">{since(z.year)}</span></span></li>
-          ))}
-        </ul>
+        {zonas.map((group) => (
+          <div class="zona-group">
+            <p class="zona-where">{group.title}</p>
+            <ul class="group-list zonas">
+              {group.list.map((z) => (
+                <li class="group-card zona"><span><strong>Zona {z.name}</strong><span>{z.place} · {z.year}</span></span></li>
+              ))}
+            </ul>
+          </div>
+        ))}
       </div>
     </div>
   </div>
@@ -78,16 +103,50 @@ const since = (year: number) => t('home.chapters.since').replace('{year}', Strin
 <section class="band invite">
   <div class="wrap two">
     <div>
+      <p class="eyebrow"><span>{t('dir.nav.list')}</span></p>
       <h2>{t('home.dir.title')}</h2>
       <p class="lead">{t('home.dir.lead')}</p>
-      <p><a class="button gold" href={localePath(lang, 'entrar/')}>{t('home.cta')}</a></p>
+      <ul class="ticks">
+        <li>{t('home.dir.one')}</li>
+        <li>{t('home.dir.two')}</li>
+        <li>{t('home.dir.three')}</li>
+      </ul>
+      <p class="invite-cta"><a class="button gold" href={localePath(lang, 'entrar/')}>{t('home.cta')}</a></p>
     </div>
-    <ul class="ticks">
-      <li>{t('home.dir.one')}</li>
-      <li>{t('home.dir.two')}</li>
-      <li>{t('home.dir.three')}</li>
-    </ul>
+    <figure class="phone">
+      <div class="phone-frame" aria-hidden="true">
+        <div class="phone-top"><span class="badge">ΗΓΔ</span><span>{t('dir.nav.list')}</span></div>
+        <div class="phone-screen">
+          <p class="phone-title">{t('dir.list.title')}</p>
+          <p class="phone-search">{t('home.mock.search')}</p>
+          {mock.map((m) => (
+            <div class="phone-card">
+              <span class="avatar" style={`--hue:${m.hue}`}>{m.initials}</span>
+              <span class="who">
+                <strong>{m.name}</strong>
+                <span class="pills"><span class={m.zona ? 'pill zona' : 'pill'}>{m.group}</span>{m.cargo && <span class="pill cargo">{m.cargo}</span>}</span>
+                <span class="muted">{m.line}</span>
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+      <figcaption>{t('home.mock.caption')}</figcaption>
+    </figure>
   </div>
 </section>
 
-<p class="motto"><span aria-hidden="true">ΗΓΔ</span> · {t('home.motto')}</p>
+<section class="motto-band">
+  <p class="motto-big">Semper Fidelis</p>
+  <p class="motto-meaning">{t('home.motto.meaning')}</p>
+</section>
+
+<section class="closing">
+  <p class="closing-mark" aria-hidden="true">ΗΓΔ</p>
+  <p class="closing-name">{t('home.title')} · 1928</p>
+  <p class="closing-cipr">{t('home.cipr')}</p>
+  <p class="closing-links">
+    <a href={localePath(lang, 'entrar/')}>{t('home.cta')}</a>
+    <a href="#capitulos">{t('home.chapters.title')}</a>
+  </p>
+</section>
