@@ -7,10 +7,10 @@
    `npm run check` lists what's still to fill in.
    ========================================================================== */
 
-export const NAME = '[Business name]';
+export const NAME = 'Eta Gamma Delta';
 
 /* The bare domain, without https:// or www. */
-export const DOMAIN = 'example.com';
+export const DOMAIN = 'example.com'; // To confirm with the Eta: etagammadelta.com is registered (Squarespace, 2023), possibly theirs
 
 /* The site's languages, the main one first. The main language is at /, any
    other at /<language>/. For one language, keep one and delete the other's
@@ -18,26 +18,26 @@ export const DOMAIN = 'example.com';
 export const LANGUAGES = ['es', 'en'] as const;
 
 /* Ten digits, no spaces or dashes: '7875550100'. */
-export const PHONE = '[phone]';
-export const WHATSAPP = '[whatsapp]';
-export const EMAIL = '[email]';
+export const PHONE = '';
+export const WHATSAPP = '';
+export const EMAIL = '';
 
 export const ADDRESS = {
-  street: '[street]',
-  town: '[town]',
-  zip: '[zip]',
+  street: '',
+  town: 'San Juan',
+  zip: '',
 };
 
 /* The business's Google Maps link (Share → Copy link on its Business Profile). */
-export const MAPS_URL = '[maps link]';
+export const MAPS_URL = '';
 
 /* schema.org's type for the business: 'Restaurant', 'AutoRepair', 'HairSalon',
    'Dentist'… ('LocalBusiness' when nothing closer fits). */
-export const BUSINESS_TYPE = 'LocalBusiness';
+export const BUSINESS_TYPE = 'Organization';
 
 /* The Client's brand color. Layout.astro puts it in --brand on :root and in
    <meta name="theme-color">; the Credit's mark takes its color from there. */
-export const BRAND = '#000000';
+export const BRAND = '#4B2183';
 
 /* Estable builds and runs the site; the footer's Credit links here. */
 export const ESTABLE_URL = 'https://estable.studio/';

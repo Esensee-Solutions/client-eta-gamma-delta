@@ -1,17 +1,20 @@
 ---
-/* The homepage, in either language. Nothing here is a design: it's a stand-in
-   that shows the invisible parts work. Replace it with the Design direction
-   (the top of the page and one section, from docs/brief.md), then the rest. */
+/* The public homepage: who the Eta is, and the way into the directory. A first pass for the
+   demo, to be designed from the brief once the Eta signs. */
 import LangSwitch from './LangSwitch.astro';
-import ContactButtons from './ContactButtons.astro';
-import { useT, type Lang } from '../i18n';
-import { NAME } from '../settings';
+import { localePath, useT, type Lang } from '../i18n';
+import { DEMO } from '../directorio/demo';
 
 interface Props { lang: Lang }
 const { lang } = Astro.props;
 const t = useT(lang);
 ---
-<LangSwitch lang={lang} page="" />
-<h1>{NAME}</h1>
-<p>{t('meta.desc')}</p>
-<ContactButtons lang={lang} />
+<section class="hero">
+  <div class="hero-top"><LangSwitch lang={lang} page="" /></div>
+  <p class="kicker">{t('home.kicker')}</p>
+  <h1>{t('home.title')}</h1>
+  <p class="lead">{t('home.lead')}</p>
+  <p><a class="button gold" href={localePath(lang, 'entrar/')}>{t('home.cta')}</a></p>
+  <p class="small">{t('home.private')}</p>
+  {DEMO && <p class="demo-flag">{t('home.demo')}</p>}
+</section>

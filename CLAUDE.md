@@ -1,11 +1,11 @@
-# [Business name]
+# Eta Gamma Delta
 
-This is the website of [business name], [what it does] in [town], Puerto Rico. The site is for
-`[domain]`, in [Spanish and English / Spanish / English].
+This is the website and private members' directory of Eta Gamma Delta (ΗΓΔ), a Puerto Rican
+sorority founded in 1928, with active chapters on four campuses and alumnae Zonas in Puerto Rico
+and Florida. The domain is still to confirm (`src/settings.ts`). Spanish first, and English.
 
-*Client:* [Business name] is an Estable **Client** on the [Starter / Business / Custom] Plan.
-*Founding Partner:* [Business name] is an Estable **Founding Partner**: Estable runs its site and
-email for free in exchange for promotion. It is not a Client and never pays.
+**Status: DEMO.** Built to show the Eta before they sign (proposal in Esensee_Solutions,
+`docs/proposals/eta-gamma-delta/`). If they sign, they're a **Client** on the Custom Plan.
 
 Read `docs/brief.md` (the Design brief) before changing anything. Every change is checked against it.
 
@@ -14,11 +14,11 @@ Read `docs/brief.md` (the Design brief) before changing anything. Every change i
 Use these in code, commits and pull requests.
 
 - **Estable**: the business that builds and runs this site. The owner, working with AI assistants.
-- **Client** (or **Founding Partner**): [business name]. Never "customer" or "user" for them.
-- **Customer**: someone who buys from [business name]. The people this site is for.
+- **Client** (or **Founding Partner**): the Eta. Never "customer" or "user" for them.
+- **Customer**: someone who buys from the Eta. The people this site is for.
 - **Design brief**: `docs/brief.md`. The business, its Customers, the site's one job, and the one detail only this business has.
 - **Site kit**: the invisible parts every Client site has (SEO, language switch, contact buttons, build and deploy). Never the look. Here they are plain files, listed in `README.md`; they become a private package later.
-- **Update**: a small content change [business name] asks for (text, prices, hours, photos).
+- **Update**: a small content change the Eta asks for (text, prices, hours, photos).
 - **Change request**: anything bigger than an Update (a new page or section, a new feature).
 - **Launch**: the day the site is live on `[domain]` and the Mailboxes work.
 
@@ -38,7 +38,7 @@ Every change reaches the site the same way. The pull request is the unit of appr
    it as a preview version and comments its link on the pull request:
    `https://pr-<number>-[worker].<account>.workers.dev`.
 2. **Approval.** Estable opens the preview link on a phone. For a Design direction or a Change
-   request, Estable sends the link to [business name] and waits for their yes. The link only
+   request, Estable sends the link to the Eta and waits for their yes. The link only
    shows the change; approving is the yes, and nothing goes live from it.
 3. **Merge into `main`.** GitHub Actions deploys it: the change is live within a minute.
 
@@ -52,7 +52,7 @@ Where "live" is:
 - **Going back**: `npx wrangler rollback` returns to the previous version. A Paused site is a new
   version (the Paused site page), and restoring is a rollback to the version before it.
 
-Links sent to [business name] or anyone outside Estable are preview links (for a yes) or
+Links sent to the Eta or anyone outside Estable are preview links (for a yes) or
 `https://[domain]` (after Launch).
 
 ## Rules
@@ -81,3 +81,38 @@ Links sent to [business name] or anyone outside Estable are preview links (for a
 - Work on a branch and open a pull request into `main`. Merging puts the site live.
 - Before every pull request: `npm run check` and `npm run build`, then the change in a
   browser at phone width, in every language.
+
+## The members' directory
+
+Pages under `/entrar/` and `/directorio/` are a members-only app. They're static pages; each
+one's script (`src/directorio/`) signs the sister in with Supabase and fills itself in from the
+database. One profile page (`/directorio/hermana/?id=…`) shows whichever sister was chosen.
+Nothing about any sister is ever in a built file.
+
+- **Who sees and changes what is decided in the database**, never only in the pages:
+  `supabase/migrations/`. A sister sees everyone minus what others hid, and edits her own
+  profile. A chapter or Zona board runs its own sisters and names its next board. The Directiva
+  General runs everything. Someone signed in who isn't in `members` sees nothing.
+- **`npm test` must pass before any change to the database or the directory ships.** It signs
+  in as each demo role and checks each one sees and changes only what she should. Add a test
+  with every new rule. Also check Supabase's security advisor after any database change.
+- **Never put a secret key in the site.** `src/directorio/config.ts` holds the public URL and
+  publishable key only.
+- Sister data reaches the page with `textContent` (`h()` in `src/directorio/app.ts`), never as HTML.
+- Copy for the directory is the `dir.*` keys in `src/content/site.ts`.
+
+### Demo only, to remove before real sisters are added
+
+- `src/directorio/demo.ts`, the "entra como…" buttons on `/entrar/` and the DEMO line on the homepage.
+- The demo database (`eta-directorio-demo`, Estable owner's personal Supabase org, free plan;
+  pauses after a week unused). The real one goes on Pro in an org under the LLC.
+- `supabase/seed-demo.sql` (made-up sisters; `node scripts/demo-seed.mjs` writes it, running it
+  resets the demo) and the three demo sign-ins.
+
+### Still to build for the real directory
+
+- Sending the invitation email when a board adds a sister (a small Supabase function using the
+  invite, so the secret key stays server-side). The demo adds her and sends nothing.
+- Sign-in emails through GoHighLevel's LC Email SMTP, in Spanish and English, and the Supabase
+  Site URL and redirect addresses set to the real domain (the email link doesn't work until then).
+- Photos (private storage), the design from the brief, and loading the Eta's real list.
