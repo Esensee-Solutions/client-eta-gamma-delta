@@ -1,5 +1,5 @@
 /* /entrar/: the email link, and (demo only) a button for each role. */
-import { app, base, db, h, run, say } from './app';
+import { app, avatar, base, db, h, run, say } from './app';
 import { DEMO, DEMO_PASSWORD, DEMO_USERS } from './demo';
 
 run(async () => {
@@ -51,17 +51,20 @@ run(async () => {
                 location.href = `${base}directorio/`;
               },
             },
-            h('strong', {}, say(`dir.login.demo.${u.role}`)),
-            h('span', {}, say(`dir.login.demo.${u.role}.note`)),
+            avatar(u.first, u.last),
+            h('span', {}, h('strong', {}, say(`dir.login.demo.${u.role}`)), say(`dir.login.demo.${u.role}.note`)),
           ),
         ),
       ),
     );
 
   app().replaceChildren(
-    h('h1', {}, say('dir.login.title')),
-    h('p', { class: 'lead' }, say('dir.login.lead')),
-    form,
-    demo,
+    h('div', { class: 'login' },
+      h('p', { class: 'monogram-sm', 'aria-hidden': 'true' }, 'ΗΓΔ'),
+      h('h1', {}, say('dir.login.title')),
+      h('p', { class: 'lead' }, say('dir.login.lead')),
+      form,
+      demo,
+    ),
   );
 });

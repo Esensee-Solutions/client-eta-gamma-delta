@@ -1,20 +1,93 @@
 ---
-/* The public homepage: who the Eta is, and the way into the directory. A first pass for the
-   demo, to be designed from the brief once the Eta signs. */
+/* The public homepage: who the Eta is, its history, its chapters and Zonas, and the way into the
+   directory. Purple and gold, the Greek letters as the one mark (the crest stays the Eta's to
+   give us, not ours to copy). */
 import LangSwitch from './LangSwitch.astro';
 import { localePath, useT, type Lang } from '../i18n';
 import { DEMO } from '../directorio/demo';
+import { ACTIVE, HISTORY, ZONAS } from '../content/chapters';
 
 interface Props { lang: Lang }
 const { lang } = Astro.props;
 const t = useT(lang);
+const since = (year: number) => t('home.chapters.since').replace('{year}', String(year));
 ---
+{DEMO && <p class="demo-ribbon">{t('home.demo')}</p>}
+
 <section class="hero">
-  <div class="hero-top"><LangSwitch lang={lang} page="" /></div>
-  <p class="kicker">{t('home.kicker')}</p>
-  <h1>{t('home.title')}</h1>
-  <p class="lead">{t('home.lead')}</p>
-  <p><a class="button gold" href={localePath(lang, 'entrar/')}>{t('home.cta')}</a></p>
-  <p class="small">{t('home.private')}</p>
-  {DEMO && <p class="demo-flag">{t('home.demo')}</p>}
+  <div class="hero-bar">
+    <span class="hero-mark" aria-hidden="true">ΗΓΔ</span>
+    <LangSwitch lang={lang} page="" />
+  </div>
+  <div class="hero-body">
+    <p class="eyebrow"><span>{t('home.since')}</span></p>
+    <p class="monogram" aria-hidden="true">ΗΓΔ</p>
+    <h1>{t('home.title')}</h1>
+    <p class="hero-lead">{t('home.lead')}</p>
+    <div class="hero-actions">
+      <a class="button gold" href={localePath(lang, 'entrar/')}>{t('home.cta')}</a>
+      <a class="button on-dark" href="#capitulos">{t('home.cta2')}</a>
+    </div>
+    <p class="hero-note">{t('home.private')}</p>
+  </div>
 </section>
+
+<section class="band">
+  <div class="wrap two">
+    <div>
+      <p class="eyebrow dark"><span>1928</span></p>
+      <h2>{t('home.history.title')}</h2>
+      <p class="lead">{t('home.history.lead')}</p>
+    </div>
+    <ol class="timeline">
+      {HISTORY.map((year) => (
+        <li><span class="year">{year}</span><span>{t(`home.history.${year}`)}</span></li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<section class="band soft" id="capitulos">
+  <div class="wrap">
+    <h2>{t('home.chapters.title')}</h2>
+    <p class="lead">{t('home.chapters.lead')}</p>
+    <div class="groups">
+      <div>
+        <h3>{t('home.chapters.active')}</h3>
+        <ul class="group-list">
+          {ACTIVE.map((c) => (
+            <li class="group-card active">
+              <span class="letter" aria-hidden="true">{c.greek}</span>
+              <span><strong>{c.name}</strong><span>{c.place}</span><span class="since">{since(c.year)}</span></span>
+            </li>
+          ))}
+        </ul>
+      </div>
+      <div>
+        <h3>{t('home.chapters.zonas')}</h3>
+        <ul class="group-list zonas">
+          {ZONAS.map((z) => (
+            <li class="group-card"><span><strong>Zona {z.name}</strong><span>{z.place}</span><span class="since">{since(z.year)}</span></span></li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="band invite">
+  <div class="wrap two">
+    <div>
+      <h2>{t('home.dir.title')}</h2>
+      <p class="lead">{t('home.dir.lead')}</p>
+      <p><a class="button gold" href={localePath(lang, 'entrar/')}>{t('home.cta')}</a></p>
+    </div>
+    <ul class="ticks">
+      <li>{t('home.dir.one')}</li>
+      <li>{t('home.dir.two')}</li>
+      <li>{t('home.dir.three')}</li>
+    </ul>
+  </div>
+</section>
+
+<p class="motto"><span aria-hidden="true">ΗΓΔ</span> · {t('home.motto')}</p>

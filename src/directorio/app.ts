@@ -83,7 +83,7 @@ export function header(me: Me, current: 'list' | 'me' | 'admin' | 'none') {
   );
   const bar = document.getElementById('dir-header')!;
   bar.replaceChildren(
-    h('a', { class: 'dir-brand', href: `${base}directorio/` }, say('dir.brand')),
+    h('a', { class: 'dir-brand', href: `${base}directorio/` }, h('span', { class: 'badge', 'aria-hidden': 'true' }, 'ΗΓΔ'), say('dir.nav.list')),
     nav,
   );
 }

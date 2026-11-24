@@ -18,10 +18,10 @@ run(async () => {
   const addForm = addSister(() => current, draw);
 
   app().replaceChildren(
-    h('h1', {}, say('dir.admin.title')),
+    h('h1', { class: 'page-title' }, say('dir.admin.title')),
     h('p', { class: 'lead' }, say('dir.admin.lead', { scope: isGeneral(me) ? say('dir.admin.everything') : mine.map((g) => g.name).join(', ') })),
-    h('div', { class: 'filters' },
-      h('label', { for: 'group' }, say('dir.admin.group')), picker,
+    h('div', { class: 'admin-tools' },
+      h('div', { class: 'field' }, h('label', { for: 'group' }, say('dir.admin.group')), picker),
       h('button', { type: 'button', class: 'button ghost', onclick: () => exportCsv(me, all) }, say('dir.admin.export'))),
     list,
     addForm,

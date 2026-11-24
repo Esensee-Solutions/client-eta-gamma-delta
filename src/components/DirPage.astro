@@ -18,7 +18,7 @@ const copy = Object.fromEntries(Object.entries(site[lang]).filter(([k]) => k.sta
 ---
 <Layout lang={lang} page={page} metaPrefix={metaPrefix} hidden>
   <div class="dir">
-    <header id="dir-header" class="dir-header"><span class="dir-brand">{copy['dir.brand']}</span></header>
+    <header id="dir-header" class="dir-header"><span class="dir-brand"><span class="badge" aria-hidden="true">ΗΓΔ</span>{copy['dir.nav.list']}</span></header>
     <div id="app" class="dir-main" aria-live="polite"><p class="muted">{t('dir.loading')}</p></div>
     <p id="toast" class="toast" role="status" hidden></p>
   </div>

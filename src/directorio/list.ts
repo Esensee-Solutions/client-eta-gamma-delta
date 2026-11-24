@@ -44,8 +44,11 @@ run(async () => {
         avatar(r.first_name, r.last_name),
         h('span', { class: 'who' },
           h('strong', {}, `${r.first_name} ${r.last_name}`, r.is_me && h('span', { class: 'tag' }, say('dir.list.you'))),
-          h('span', {}, [groupName(all, r.group_id), r.pledge_class].filter(Boolean).join(' · ')),
-          h('span', { class: 'muted' }, [r.position, r.status === 'alumna' ? r.employer : r.major, r.city].filter(Boolean).join(' · ')),
+          h('span', { class: 'pills' },
+            h('span', { class: r.group_id.startsWith('zona-') ? 'pill zona' : 'pill' }, groupName(all, r.group_id)),
+            r.position && h('span', { class: 'pill role' }, r.position),
+          ),
+          h('span', { class: 'muted' }, [r.pledge_class, r.status === 'alumna' ? r.employer : r.major, r.city].filter(Boolean).join(' · ')),
         ),
       ),
     );
@@ -65,8 +68,8 @@ run(async () => {
   group.addEventListener('change', draw);
 
   app().replaceChildren(
-    h('h1', {}, say('dir.list.title')),
-    h('div', { class: 'filters' }, search, group, chips),
+    h('h1', { class: 'page-title' }, say('dir.list.title')),
+    h('div', { class: 'filters' }, h('div', { class: 'search' }, search), group, chips),
     count,
     list,
   );
