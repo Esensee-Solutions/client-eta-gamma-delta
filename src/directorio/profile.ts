@@ -42,7 +42,7 @@ run(async () => {
           h('span', { class: 'pills' },
             h('span', { class: s.group_id.startsWith('zona-') ? 'pill zona' : 'pill' }, groupName(all, s.group_id)),
             h('span', { class: 'pill' }, say(`dir.status.${s.status}`)),
-            s.position && h('span', { class: 'pill role' }, s.position),
+            s.position && h('span', { class: 'pill cargo' }, s.position),
           ),
         ),
       ),

@@ -47,7 +47,7 @@ run(async () => {
           h('strong', {}, `${r.first_name} ${r.last_name}`, r.is_me && h('span', { class: 'tag' }, say('dir.list.you'))),
           h('span', { class: 'pills' },
             h('span', { class: r.group_id.startsWith('zona-') ? 'pill zona' : 'pill' }, groupName(all, r.group_id)),
-            r.position && h('span', { class: 'pill role' }, r.position),
+            r.position && h('span', { class: 'pill cargo' }, r.position),
           ),
           h('span', { class: 'muted' }, [r.pledge_class, r.status === 'alumna' ? r.employer : r.major, r.city].filter(Boolean).join(' · ')),
         ),
