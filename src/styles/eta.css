@@ -169,10 +169,10 @@ footer { text-align: center; padding: 1.5rem 1rem 2.5rem; color: var(--muted); f
 .who { display: flex; flex-direction: column; gap: .2rem; min-width: 0; font-size: .92rem; }
 .who strong { font: 600 1.22rem/1.15 var(--serif); color: var(--purple-dk); }
 .who > span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.pills { display: flex; flex-wrap: wrap; gap: .3rem; }
+.pills { display: flex; flex-wrap: wrap; align-items: center; gap: .3rem; }
 .pill { display: inline-block; font: 600 .74rem/1 var(--sans); letter-spacing: .02em; padding: .32rem .6rem; border-radius: 999px; background: var(--purple-lt); color: var(--purple); white-space: nowrap; }
 .pill.zona { background: var(--gold-lt); color: var(--gold-ink); }
-.pill.role { background: var(--purple); color: #fff; }
+.pill.cargo { background: var(--purple); color: #fff; }
 .tag { display: inline-block; margin-left: .45rem; background: var(--gold); color: var(--purple-xdk); font: 700 .68rem var(--sans); letter-spacing: .06em; text-transform: uppercase; padding: .15rem .5rem; border-radius: 99px; vertical-align: middle; }
 .avatar { --hue: 270; flex: none; width: 54px; height: 54px; border-radius: 50%; display: grid; place-items: center; font: 700 1.25rem var(--serif); letter-spacing: .02em;
   color: #fff; background: linear-gradient(150deg, hsl(calc(255 + var(--hue) / 8) 48% 46%), hsl(calc(265 + var(--hue) / 10) 55% 26%));
@@ -185,7 +185,8 @@ footer { text-align: center; padding: 1.5rem 1rem 2.5rem; color: var(--muted); f
   linear-gradient(150deg, var(--purple), var(--purple-dk)); position: relative; }
 .profile-banner::after { content: 'ΗΓΔ'; position: absolute; right: 1.2rem; bottom: .6rem; font: 700 2.2rem var(--serif); letter-spacing: .1em; color: rgb(226 193 90 / .35); }
 .profile-body { padding: 0 1.25rem 1.5rem; }
-.profile-head { position: relative; z-index: 1; display: flex; flex-wrap: wrap; gap: .4rem 1.1rem; align-items: flex-end; margin-top: -52px; margin-bottom: 1rem; }
+.profile-head { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: flex-start; gap: .9rem; margin-top: -52px; margin-bottom: 1rem; }
+.profile-head .pills { margin-top: .1rem; }
 .profile-head h1 { margin: 0 0 .35rem; font-size: clamp(1.9rem, 6vw, 2.5rem); }
 .actions { display: flex; gap: .55rem; flex-wrap: wrap; margin: .3rem 0 1.25rem; }
 .bio { font: italic 500 1.25rem/1.5 var(--serif); color: var(--ink); border-left: 3px solid var(--gold); padding-left: 1rem; margin: 0 0 1.25rem; }
