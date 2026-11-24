@@ -1,0 +1,27 @@
+---
+/* The frame of every directory page: its header, the place its script draws into, and the
+   page's copy (every 'dir.*' key, in the page's language) for that script. Nothing about any
+   sister is in the built page: it all arrives from the database after she signs in. */
+import Layout from '../layouts/Layout.astro';
+import { site } from '../content/site';
+import type { Lang } from '../i18n';
+import { useT } from '../i18n';
+
+interface Props {
+  lang: Lang;
+  page: string;
+  metaPrefix: string;
+}
+const { lang, page, metaPrefix } = Astro.props;
+const t = useT(lang);
+const copy = Object.fromEntries(Object.entries(site[lang]).filter(([k]) => k.startsWith('dir.')));
+---
+<Layout lang={lang} page={page} metaPrefix={metaPrefix} hidden>
+  <div class="dir">
+    <header id="dir-header" class="dir-header"><span class="dir-brand">{copy['dir.brand']}</span></header>
+    <div id="app" class="dir-main" aria-live="polite"><p class="muted">{t('dir.loading')}</p></div>
+    <p id="toast" class="toast" role="status" hidden></p>
+  </div>
+  <script type="application/json" id="dir-copy" set:html={JSON.stringify(copy).replace(/</g, '\\u003c')} />
+  <slot />
+</Layout>

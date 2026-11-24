@@ -7,4 +7,11 @@
            (pages.<key> and pages.<key>.desc).
    hidden: true keeps a page out of the sitemap, llms.txt and Google
            (a thank-you page). */
-export const pages: { path: string; key: string; hidden?: boolean }[] = [{ path: '', key: 'home' }];
+export const pages: { path: string; key: string; hidden?: boolean }[] = [
+  { path: '', key: 'home' },
+  { path: 'entrar/', key: 'entrar', hidden: true },
+  { path: 'directorio/', key: 'directorio', hidden: true },
+  { path: 'directorio/hermana/', key: 'hermana', hidden: true },
+  { path: 'directorio/mi-perfil/', key: 'miperfil', hidden: true },
+  { path: 'directorio/administrar/', key: 'administrar', hidden: true },
+];

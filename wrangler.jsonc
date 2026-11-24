@@ -4,7 +4,7 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   // The Worker's name: the repository's name without "client-" (cafe-luna).
-  "name": "[worker]",
+  "name": "eta-gamma-delta",
   "compatibility_date": "2026-09-25",
   "assets": {
     "directory": "./dist",
