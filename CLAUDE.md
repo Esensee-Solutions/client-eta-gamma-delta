@@ -115,4 +115,5 @@ Nothing about any sister is ever in a built file.
   invite, so the secret key stays server-side). The demo adds her and sends nothing.
 - Sign-in emails through GoHighLevel's LC Email SMTP, in Spanish and English, and the Supabase
   Site URL and redirect addresses set to the real domain (the email link doesn't work until then).
-- Photos (private storage), the design from the brief, and loading the Eta's real list.
+- The design from the brief, and loading the Eta's real list. (Photos are built: private
+  bucket `fotos`, one `<member id>.jpg` each, rules in `supabase/migrations/…_fotos.sql`.)

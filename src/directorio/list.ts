@@ -1,10 +1,10 @@
 /* /directorio/: every sister, with search and filters. One list for 50 or 3,000 sisters. */
-import { app, avatar, base, db, groupName, groups, h, header, run, say, signedIn } from './app';
+import { app, avatar, base, db, groupName, groups, h, header, photoUrls, run, say, signedIn } from './app';
 
 type Row = {
   id: string; first_name: string; last_name: string; group_id: string; status: string;
   pledge_class: string | null; position: string | null; major: string | null; city: string | null;
-  employer: string | null; grad_year: number | null; is_me: boolean;
+  employer: string | null; grad_year: number | null; is_me: boolean; photo_at: string | null;
 };
 
 const fold = (s: string) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
@@ -15,6 +15,7 @@ run(async () => {
   const [all, { data, error }] = await Promise.all([groups(), db.rpc('directory')]);
   if (error) throw error;
   const rows = data as Row[];
+  const photos = await photoUrls(rows);
 
   const search = h('input', { type: 'search', id: 'q', placeholder: say('dir.list.search'), 'aria-label': say('dir.list.search') }) as HTMLInputElement;
   const group = h(
@@ -41,7 +42,7 @@ run(async () => {
   const card = (r: Row) =>
     h('li', {},
       h('a', { class: 'card person', href: `${base}directorio/hermana/?id=${r.id}` },
-        avatar(r.first_name, r.last_name),
+        avatar(r.first_name, r.last_name, false, photos.get(r.id)),
         h('span', { class: 'who' },
           h('strong', {}, `${r.first_name} ${r.last_name}`, r.is_me && h('span', { class: 'tag' }, say('dir.list.you'))),
           h('span', { class: 'pills' },

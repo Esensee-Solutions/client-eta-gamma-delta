@@ -1,7 +1,7 @@
 /* /directorio/mi-perfil/: her own profile. With ?id=…, a board editing one of its sisters,
    which also shows the fields only boards change. The database enforces both: this page only
    shows what it will accept. */
-import { app, base, db, groups, h, header, isBoard, run, say, signedIn, toast } from './app';
+import { app, avatar, base, db, groups, h, header, isBoard, photoPath, photoUrls, run, say, signedIn, squareJpeg, toast } from './app';
 
 const OWN = ['phone', 'city', 'major', 'grad_year', 'birthday', 'instagram', 'employer'] as const;
 const HIDEABLE = ['phone', 'email', 'city', 'birthday', 'instagram', 'employer'];
@@ -54,11 +54,55 @@ run(async () => {
     h('button', { type: 'submit', class: 'button' }, say('dir.me.save')),
   );
 
+  // Her photo: chosen on the phone, squared and shrunk here, then saved as '<her id>.jpg'.
+  const photoBox = h('div', { class: 'photo-edit card' });
+  const drawPhoto = async () => {
+    const url = (await photoUrls([s as { id: string; photo_at: string | null }])).get(s.id);
+    const file = h('input', { type: 'file', accept: 'image/*', id: 'photo', class: 'visually-hidden', onchange: async (e: Event) => {
+      const f = (e.target as HTMLInputElement).files?.[0];
+      if (!f) return;
+      toast(say('dir.photo.saving'));
+      try {
+        const jpg = await squareJpeg(f);
+        const { error } = await db.storage.from('fotos').upload(photoPath(s.id), jpg, { upsert: true, contentType: 'image/jpeg' });
+        if (error) throw error;
+        const at = new Date().toISOString();
+        const { error: e2 } = await db.from('members').update({ photo_at: at }).eq('id', s.id);
+        if (e2) throw e2;
+        s.photo_at = at;
+        toast(say('dir.photo.saved'));
+      } catch (err) {
+        console.error(err);
+        toast(say('dir.error'));
+      }
+      drawPhoto();
+    } });
+    photoBox.replaceChildren(
+      avatar(s.first_name, s.last_name, true, url),
+      h('div', { class: 'stack' },
+        h('p', { class: 'muted small' }, say('dir.photo.note')),
+        h('div', { class: 'actions' },
+          file,
+          h('label', { for: 'photo', class: 'button' }, say(url ? 'dir.photo.change' : 'dir.photo.add')),
+          url && h('button', { type: 'button', class: 'button ghost', onclick: async () => {
+            await db.storage.from('fotos').remove([photoPath(s.id)]);
+            await db.from('members').update({ photo_at: null }).eq('id', s.id);
+            s.photo_at = null;
+            toast(say('dir.photo.removed'));
+            drawPhoto();
+          } }, say('dir.photo.remove')),
+        ),
+      ),
+    );
+  };
+  await drawPhoto();
+
   const all = await groups();
   app().replaceChildren(
     h('a', { class: 'back', href: `${base}directorio/hermana/?id=${id}` }, `← ${s.first_name} ${s.last_name}`),
     h('h1', {}, otherId ? say('dir.me.other', { name: `${s.first_name} ${s.last_name}` }) : say('dir.me.title')),
     h('p', { class: 'lead' }, say('dir.me.lead')),
+    photoBox,
     !board && h('p', { class: 'muted small' }, `${all.find((g) => g.id === s.group_id)?.name ?? ''}${s.pledge_class ? ` · ${s.pledge_class}` : ''}${s.position ? ` · ${s.position}` : ''}`),
     form,
   );

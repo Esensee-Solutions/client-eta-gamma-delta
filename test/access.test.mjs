@@ -138,6 +138,29 @@ test('the Directiva General sees and runs everyone', async () => {
   assert.ok(dir.every((m) => m.can_edit));
 });
 
+test('photos: she and her board can change hers; nobody else can; only sisters can see them', async () => {
+  const jpg = new Blob([Uint8Array.from([0xff, 0xd8, 0xff, 0xe0, 0, 0x10, 0x4a, 0x46, 0x49, 0x46, 0, 1, 0xff, 0xd9])], { type: 'image/jpeg' });
+  const up = (c, id) => c.storage.from('fotos').upload(`${id}.jpg`, jpg, { upsert: true, contentType: 'image/jpeg' });
+  const gone = (id) => general.storage.from('fotos').remove([`${id}.jpg`]);
+
+  assert.ifError((await up(hermana, camila.id)).error);
+  assert.ok((await up(hermana, isabelBeta.id)).error, "a sister changing another sister's photo should be refused");
+  assert.ok((await up(hermana, 'not-a-sister')).error, 'a file that isn’t a sister’s photo should be refused');
+
+  assert.ifError((await up(directiva, isabelBeta.id)).error); // her board, for her
+  assert.ok((await up(directiva, patriciaAlpha.id)).error, "Beta's board changing an Alpha sister's photo should be refused");
+
+  const { data: signed, error } = await hermana.storage.from('fotos').createSignedUrls([`${isabelBeta.id}.jpg`], 60);
+  assert.ifError(error);
+  assert.ok(signed[0].signedUrl, 'a sister sees another sister’s photo');
+  const { data: anonSigned } = await anon.storage.from('fotos').createSignedUrls([`${camila.id}.jpg`], 60);
+  assert.ok(!anonSigned?.[0]?.signedUrl, 'someone not signed in sees no photo');
+
+  assert.ok((await hermana.storage.from('fotos').remove([`${isabelBeta.id}.jpg`])).data?.length === 0, "a sister can't delete another's photo");
+  await gone(camila.id);
+  await gone(isabelBeta.id);
+});
+
 function byId(list, id) {
   return list.find((m) => m.id === id);
 }

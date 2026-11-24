@@ -1,5 +1,5 @@
 /* /directorio/hermana/?id=…: one page that fills itself in with whichever sister was chosen. */
-import { app, avatar, base, db, groupName, groups, h, header, run, say, showDate, showPhone, signedIn } from './app';
+import { app, avatar, base, db, groupName, groups, h, header, photoUrls, run, say, showDate, showPhone, signedIn } from './app';
 
 run(async () => {
   const me = await signedIn();
@@ -11,6 +11,7 @@ run(async () => {
   const back = h('a', { class: 'back', href: `${base}directorio/` }, say('dir.profile.back'));
   if (!s) return app().replaceChildren(back, h('p', { class: 'notice' }, say('dir.profile.notfound')));
 
+  const photo = (await photoUrls([s])).get(s.id);
   document.title = `${s.first_name} ${s.last_name} | Eta Gamma Delta`;
   const digits = s.phone ? s.phone.replace(/\D/g, '').slice(-10) : '';
   const row = (key: string, value: Node | string | null) =>
@@ -35,7 +36,7 @@ run(async () => {
       h('div', { class: 'profile-banner' }),
       h('div', { class: 'profile-body' },
       h('header', { class: 'profile-head' },
-        avatar(s.first_name, s.last_name, true),
+        avatar(s.first_name, s.last_name, true, photo),
         h('div', {},
           h('h1', {}, `${s.first_name} ${s.last_name}`),
           h('span', { class: 'pills' },

@@ -224,3 +224,14 @@ footer { text-align: center; padding: 1.5rem 1rem 2.5rem; color: var(--muted); f
 /* Long names and long chapter lists never push the page wider than the phone. */
 .filters > *, .cards > li, .person, .row .who, .groups > * { min-width: 0; }
 select { max-width: 100%; text-overflow: ellipsis; }
+
+/* Photos */
+img.avatar { object-fit: cover; background: var(--purple-lt); }
+.photo-edit { display: flex; flex-wrap: wrap; gap: 1.1rem; align-items: center; margin: 0 0 1rem; }
+.photo-edit .stack { flex: 1 1 14rem; }
+.photo-edit .actions { margin: 0; }
+.photo-edit label.button { display: inline-flex; color: #fff; }
+.visually-hidden { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+.visually-hidden:focus-visible + label { outline: 3px solid var(--gold); outline-offset: 2px; }
+.row-who { display: flex; align-items: center; gap: .75rem; min-width: 0; }
+.row-who .avatar { width: 42px; height: 42px; font-size: 1rem; }
