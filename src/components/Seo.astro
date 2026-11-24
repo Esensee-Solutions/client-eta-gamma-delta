@@ -1,0 +1,86 @@
+---
+/* Everything a page's <head> needs for Google, shared links and AI assistants:
+   title, description, canonical address, each language's version (hreflang),
+   the share card and the business's structured data. */
+import { languages, localePath, mainLang, useT, type Lang } from '../i18n';
+import { ADDRESS, BRAND, BUSINESS_TYPE, EMAIL, NAME, PHONE } from '../settings';
+import { showPhone } from '../contact';
+
+interface Props {
+  lang: Lang;
+  /** The page's address without the language prefix: '' or 'menu/'. */
+  page: string;
+  /** Where the page's title and description live in the copy: 'meta', 'meta.menu'… */
+  metaPrefix: string;
+  /** true keeps the page out of Google (a thank-you page). */
+  hidden?: boolean;
+}
+
+const { lang, page, metaPrefix, hidden = false } = Astro.props;
+const t = useT(lang);
+const origin = Astro.site!.origin;
+const url = (l: Lang) => origin + localePath(l, page);
+const ogLocale: Record<string, string> = { es: 'es_PR', en: 'en_US' };
+
+const business = {
+  '@context': 'https://schema.org',
+  '@type': BUSINESS_TYPE,
+  name: NAME,
+  description: t('meta.desc'),
+  url: origin + localePath(lang),
+  image: `${origin}/og-image.jpg`,
+  ...(PHONE && { telephone: showPhone(PHONE) }),
+  ...(EMAIL && { email: EMAIL }),
+  ...(ADDRESS.town && {
+    address: {
+      '@type': 'PostalAddress',
+      ...(ADDRESS.street && { streetAddress: ADDRESS.street }),
+      addressLocality: ADDRESS.town,
+      addressRegion: 'PR',
+      ...(ADDRESS.zip && { postalCode: ADDRESS.zip }),
+      addressCountry: 'US',
+    },
+  }),
+};
+---
+<title>{t(`${metaPrefix}.title`)}</title>
+<meta name="description" content={t(`${metaPrefix}.desc`)}>
+<meta name="theme-color" content={BRAND}>
+{hidden && <meta name="robots" content="noindex">}
+
+<link rel="canonical" href={url(lang)}>
+{languages.length > 1 && languages.map((l) => <link rel="alternate" hreflang={l} href={url(l)}>)}
+{languages.length > 1 && <link rel="alternate" hreflang="x-default" href={url(mainLang)}>}
+
+<meta property="og:type" content="website">
+<meta property="og:url" content={url(lang)}>
+<meta property="og:title" content={t(`${metaPrefix}.title`)}>
+<meta property="og:description" content={t(`${metaPrefix}.desc`)}>
+<meta property="og:site_name" content={NAME}>
+<meta property="og:locale" content={ogLocale[lang]}>
+{languages.filter((l) => l !== lang).map((l) => <meta property="og:locale:alternate" content={ogLocale[l]}>)}
+<meta property="og:image" content={`${origin}/og-image.jpg`}>
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content={NAME}>
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="icon" href="/favicon.ico" sizes="48x48">
+<link rel="icon" href="/favicon-96x96.png" type="image/png" sizes="96x96">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+<script type="application/ld+json" is:inline set:html={JSON.stringify(business)} />
+
+{lang === mainLang && languages.length > 1 && (
+  /* A visitor whose browser is in one of the site's other languages, arriving
+     from another site, gets that language's page. Coming from this site (the
+     language switch) keeps the language they picked. Nothing is stored. */
+  <script is:inline define:vars={{ others: languages.filter((l) => l !== mainLang).map((l) => [l, localePath(l, page)]) }}>
+    try {
+      var fromHere = document.referrer && new URL(document.referrer).origin === location.origin;
+      var mine = (navigator.language || '').slice(0, 2).toLowerCase();
+      var match = others.find(function (o) { return o[0] === mine; });
+      if (!fromHere && match) location.replace(match[1] + location.hash);
+    } catch (e) {}
+  </script>
+)}

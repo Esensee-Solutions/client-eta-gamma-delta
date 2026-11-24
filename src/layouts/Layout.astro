@@ -1,0 +1,49 @@
+---
+/* Every page: <head>, the skip link, the page, the footer.
+
+   This file holds the invisible parts only. The look is this site's own,
+   designed from docs/brief.md: its header, footer, type, colors and sections
+   are built here and in src/components/, never copied from another site. */
+import Seo from '../components/Seo.astro';
+import Credit from '../components/Credit.astro';
+import { BRAND } from '../settings';
+import type { Lang } from '../i18n';
+import { useT } from '../i18n';
+
+interface Props {
+  lang: Lang;
+  /** The page's address without the language prefix: '' or 'menu/'. */
+  page: string;
+  /** Where the page's title and description live in the copy: 'meta', 'meta.menu'… */
+  metaPrefix: string;
+  /** true keeps the page out of Google (a thank-you page). */
+  hidden?: boolean;
+}
+
+const { lang, page, metaPrefix, hidden } = Astro.props;
+const t = useT(lang);
+---
+<!doctype html>
+<html lang={lang} style={`--brand: ${BRAND}`}>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<Seo lang={lang} page={page} metaPrefix={metaPrefix} hidden={hidden} />
+</head>
+<body>
+
+<a class="skip-link" href="#main">{t('a11y.skip')}</a>
+
+<!-- This site's header goes here, with <LangSwitch lang={lang} page={page} />. -->
+
+<main id="main">
+  <slot />
+</main>
+
+<footer>
+  <!-- This site's footer goes here. The Credit stays as its last line. -->
+  <p><Credit lang={lang} /></p>
+</footer>
+
+</body>
+</html>

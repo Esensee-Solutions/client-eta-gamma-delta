@@ -1,0 +1,28 @@
+---
+/* The language switch: a plain link to the same page in each language, which
+   keeps the section the visitor was on. It has no look of its own: style
+   .lang-switch and .lang-switch a[aria-current] in this site's CSS. Shows
+   nothing on a one-language site. */
+import { languages, localePath, useT, type Lang } from '../i18n';
+
+interface Props { lang: Lang; page: string }
+const { lang, page } = Astro.props;
+const t = useT(lang);
+---
+{languages.length > 1 && (
+  <div class="lang-switch" role="group" aria-label={t('lang.label')}>
+    {languages.map((l) => (
+      <a href={localePath(l, page)} hreflang={l} lang={l} aria-current={l === lang ? 'page' : undefined} data-lang-link>
+        {l.toUpperCase()}
+      </a>
+    ))}
+  </div>
+)}
+
+<script>
+  document.querySelectorAll<HTMLAnchorElement>('[data-lang-link]').forEach((link) => {
+    link.addEventListener('click', () => {
+      if (location.hash) link.hash = location.hash;
+    });
+  });
+</script>

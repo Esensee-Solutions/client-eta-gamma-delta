@@ -1,0 +1,26 @@
+// The site on Cloudflare Workers (Estable ADR 0003). There is no Worker code:
+// Cloudflare serves the built files in dist/ as they are. GitHub Actions builds
+// and deploys (.github/workflows/site.yml).
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  // The Worker's name: the repository's name without "client-" (cafe-luna).
+  "name": "[worker]",
+  "compatibility_date": "2026-09-25",
+  "assets": {
+    "directory": "./dist",
+    // /en and /en/ both serve en/index.html.
+    "html_handling": "auto-trailing-slash"
+  },
+  // Before Launch the site answers on the Worker's own workers.dev address.
+  // At Launch, the pull request that connects the domain uncomments "routes"
+  // (with the real domain) and sets "workers_dev" to false, so the site answers
+  // on one address. www forwards to it with a Cloudflare Redirect Rule
+  // (dashboard), not from here.
+  // "routes": [{ "pattern": "[domain]", "custom_domain": true }],
+  "workers_dev": true,
+  // Keeps the per-version preview links that pull requests get.
+  "preview_urls": true,
+  // Cloudflare Workers Builds runs `npx wrangler preview` for branches and pull
+  // requests, which fails without this block, even empty.
+  "previews": {}
+}

@@ -1,0 +1,18 @@
+---
+/* The call, WhatsApp, email and Maps buttons, for whichever of them the
+   business has (src/settings.ts). They have no look of their own: style
+   .contact-buttons and its links in this site's CSS, or use `links` from
+   src/contact.ts directly where the design wants its own markup. */
+import { links } from '../contact';
+import { useT, type Lang } from '../i18n';
+
+interface Props { lang: Lang }
+const t = useT(Astro.props.lang);
+const external = { target: '_blank', rel: 'noopener' };
+---
+<div class="contact-buttons">
+  {links.call && <a href={links.call} data-contact="call">{t('contact.call')}</a>}
+  {links.whatsapp && <a href={links.whatsapp} data-contact="whatsapp" {...external}>{t('contact.whatsapp')}</a>}
+  {links.email && <a href={links.email} data-contact="email">{t('contact.email')}</a>}
+  {links.maps && <a href={links.maps} data-contact="maps" {...external}>{t('contact.maps')}</a>}
+</div>

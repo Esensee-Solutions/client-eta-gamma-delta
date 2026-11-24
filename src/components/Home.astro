@@ -1,0 +1,17 @@
+---
+/* The homepage, in either language. Nothing here is a design: it's a stand-in
+   that shows the invisible parts work. Replace it with the Design direction
+   (the top of the page and one section, from docs/brief.md), then the rest. */
+import LangSwitch from './LangSwitch.astro';
+import ContactButtons from './ContactButtons.astro';
+import { useT, type Lang } from '../i18n';
+import { NAME } from '../settings';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = useT(lang);
+---
+<LangSwitch lang={lang} page="" />
+<h1>{NAME}</h1>
+<p>{t('meta.desc')}</p>
+<ContactButtons lang={lang} />

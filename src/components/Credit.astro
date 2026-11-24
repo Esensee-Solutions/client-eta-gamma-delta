@@ -1,0 +1,14 @@
+---
+/* Estable's Credit: the one line at the bottom of the footer. It takes the
+   footer's look, and its mark takes --brand. Keep it the footer's last line. */
+import { ESTABLE_URL } from '../settings';
+import type { Lang } from '../i18n';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+---
+<esensee-credit lang={lang}><a href={ESTABLE_URL + (lang === 'en' ? 'en/' : '')} target="_blank" rel="noopener">Built by Estable Studio</a></esensee-credit>
+
+<script>
+  import '../scripts/esensee-credit.js';
+</script>
