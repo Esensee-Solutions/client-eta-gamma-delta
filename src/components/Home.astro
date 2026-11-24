@@ -1,28 +1,31 @@
 ---
-/* The public homepage: who the Eta is, its history, its chapters and Zonas, and the way into the
-   directory. Purple and gold, the Greek letters as the one mark (the crest stays the Eta's to
-   give us, not ours to copy). */
+/* The public homepage, in the Eta's own voice (docs/research.md): its tagline, the rosebud, the
+   story in moments, unión · servicio · caridad, its traditions, the chapters and Zonas, the
+   directory as SISTER made real, and the road to the centenary. The crest stays the Eta's to
+   give us, not ours to copy. */
 import LangSwitch from './LangSwitch.astro';
+import Rosebud from './Rosebud.astro';
 import { localePath, useT, type Lang } from '../i18n';
 import { DEMO } from '../directorio/demo';
-import { ACTIVE, HISTORY, ZONAS } from '../content/chapters';
+import { ACTIVE, CENTENARY, FOUNDED, MOMENTS, TRADITIONS, VALUES, ZONAS } from '../content/chapters';
 
 interface Props { lang: Lang }
 const { lang } = Astro.props;
 const t = useT(lang);
-const since = (year: number) => t('home.chapters.since').replace('{year}', String(year));
+const year = new Date().getFullYear();
+const since = (y: number) => t('home.chapters.since').replace('{year}', String(y));
 const zonas = [
   { title: t('home.zonas.pr'), list: ZONAS.filter((z) => !('florida' in z)) },
   { title: t('home.zonas.fl'), list: ZONAS.filter((z) => 'florida' in z) },
 ];
-const statusOf = (s: 'activa' | 'alumna') => t(`dir.status.${s}`);
+const badge = t('home.badge');
 
 /* The phone in the directory section: made-up sisters drawn with the directory's own styles. */
 const mock = [
-  { initials: 'CR', hue: 40, name: 'Camila Rivera Ortiz', group: 'Capítulo Beta', zona: false, cargo: '', line: `Otoño 2024 · ${statusOf('activa')}` },
+  { initials: 'CR', hue: 40, name: 'Camila Rivera Ortiz', group: 'Capítulo Beta', zona: false, cargo: '', line: 'Otoño 2024 · Mayagüez' },
   { initials: 'MV', hue: 200, name: 'Marisol Vélez Santiago', group: 'Zona Alpha', zona: true, cargo: 'Presidenta', line: 'Primavera 2009 · San Juan' },
   { initials: 'NM', hue: 120, name: 'Natalia Morales Ramos', group: 'Zona Omega', zona: true, cargo: '', line: 'Primavera 2013 · Orlando' },
-  { initials: 'AT', hue: 300, name: 'Andrea Torres Medina', group: 'Capítulo Beta', zona: false, cargo: 'Presidenta', line: `Primavera 2024 · ${statusOf('activa')}` },
+  { initials: 'AT', hue: 300, name: 'Andrea Torres Medina', group: 'Capítulo Beta', zona: false, cargo: 'Presidenta', line: 'Primavera 2024 · Mayagüez' },
 ];
 ---
 {DEMO && <p class="demo-ribbon">{t('home.demo')}</p>}
@@ -33,42 +36,77 @@ const mock = [
     <LangSwitch lang={lang} page="" />
   </div>
   <div class="hero-body">
-    <p class="eyebrow"><span>{t('home.since')}</span></p>
+    <svg class="badge-ring" viewBox="0 0 200 200" aria-hidden="true">
+      <defs><path id="ring" d="M100,100 m-78,0 a78,78 0 1,1 156,0 a78,78 0 1,1 -156,0" /></defs>
+      <circle class="badge-circle" cx="100" cy="100" r="62" />
+      <text><textPath href="#ring">{badge}</textPath></text>
+      <text class="badge-num" x="100" y="96" text-anchor="middle">{CENTENARY - year}</text>
+      <text class="badge-unit" x="100" y="120" text-anchor="middle">{lang === 'es' ? 'años' : 'years'}</text>
+    </svg>
+    <p class="eyebrow"><span>{t('home.eyebrow')}</span></p>
+    <Rosebud class="hero-bud" size={40} />
     <p class="monogram" aria-hidden="true">ΗΓΔ</p>
     <h1>{t('home.title')}</h1>
+    <p class="tagline">{t('home.tagline')}</p>
     <p class="hero-lead">{t('home.lead')}</p>
     <div class="hero-actions">
       <a class="button gold" href={localePath(lang, 'entrar/')}>{t('home.cta')}</a>
-      <a class="button on-dark" href="#capitulos">{t('home.cta2')}</a>
+      <a class="button on-dark" href="#historia">{t('home.cta2')}</a>
     </div>
     <p class="hero-note">{t('home.private')}</p>
   </div>
   <dl class="stats">
-    <div><dt>{t('home.stat.founded')}</dt><dd>1928</dd></div>
+    <div><dt>{t('home.stat.years')}</dt><dd>{year - FOUNDED}</dd></div>
     <div><dt>{t('home.stat.active')}</dt><dd>{ACTIVE.length}</dd></div>
     <div><dt>{t('home.stat.zonas')}</dt><dd>{ZONAS.length}</dd></div>
     <div><dt>{t('home.stat.where')}</dt><dd>{t('home.stat.where.short')}</dd></div>
   </dl>
 </section>
 
-<section class="band history">
+<section class="band story" id="historia">
   <div class="wrap two">
-    <div class="history-intro">
-      <p class="big-year" aria-hidden="true">1928</p>
-      <h2>{t('home.history.title')}</h2>
-      <p class="lead">{t('home.history.lead')}</p>
+    <div class="story-intro">
+      <p class="eyebrow dark"><span>{t('home.story.eyebrow')}</span></p>
+      <h2>{t('home.story.title')}</h2>
+      <p class="lead">{t('home.story.lead')}</p>
+      <blockquote class="quote"><Rosebud class="on-light" size={26} /><p>{t('home.story.quote')}</p></blockquote>
     </div>
-    <ol class="timeline">
-      {HISTORY.map((year) => (
-        <li><span class="year">{year}</span><span>{t(`home.history.${year}`)}</span></li>
+    <ol class="moments">
+      {MOMENTS.map((m) => (
+        <li class={`moment ${m}`}>
+          <span class="moment-year">{t(`home.m.${m}.year`)}</span>
+          <h3>{t(`home.m.${m}.title`)}</h3>
+          <p>{t(`home.m.${m}.text`)}</p>
+        </li>
       ))}
     </ol>
   </div>
 </section>
 
+<section class="band values">
+  <div class="wrap">
+    <p class="eyebrow center"><span>{t('home.values.eyebrow')}</span></p>
+    <h2 class="center">{t('home.values.title')}</h2>
+    <ul class="value-list">
+      {VALUES.map((v, i) => (
+        <li class="value">
+          <span class="value-num" aria-hidden="true">{['Η', 'Γ', 'Δ'][i]}</span>
+          <h3>{t(`home.v.${v}.title`)}</h3>
+          <p>{t(`home.v.${v}.text`)}</p>
+        </li>
+      ))}
+    </ul>
+    <h3 class="trad-title">{t('home.trad.title')}</h3>
+    <ul class="traditions">
+      {TRADITIONS.map((k) => (
+        <li class="tradition"><strong>{t(`home.t.${k}.title`)}</strong><span>{t(`home.t.${k}.text`)}</span></li>
+      ))}
+    </ul>
+  </div>
+</section>
+
 <section class="band soft" id="capitulos">
   <div class="wrap">
-    <p class="eyebrow dark"><span>ΗΓΔ</span></p>
     <h2>{t('home.chapters.title')}</h2>
     <p class="lead">{t('home.chapters.lead')}</p>
     <div class="groups">
@@ -103,7 +141,7 @@ const mock = [
 <section class="band invite">
   <div class="wrap two">
     <div>
-      <p class="eyebrow"><span>{t('dir.nav.list')}</span></p>
+      <p class="eyebrow"><span>{t('home.dir.eyebrow')}</span></p>
       <h2>{t('home.dir.title')}</h2>
       <p class="lead">{t('home.dir.lead')}</p>
       <ul class="ticks">
@@ -136,17 +174,23 @@ const mock = [
   </div>
 </section>
 
-<section class="motto-band">
+<section class="centenary">
+  <Rosebud class="on-light" size={44} />
+  <p class="eyebrow dark center"><span>{t('home.cent.eyebrow')}</span></p>
+  <p class="cent-years">{t('home.cent.years')}</p>
+  <p class="cent-text">{t('home.cent.text').replace('{n}', String(CENTENARY - year))}</p>
   <p class="motto-big">Semper Fidelis</p>
   <p class="motto-meaning">{t('home.motto.meaning')}</p>
 </section>
 
 <section class="closing">
   <p class="closing-mark" aria-hidden="true">ΗΓΔ</p>
-  <p class="closing-name">{t('home.title')} · 1928</p>
+  <p class="closing-name">{t('home.title')} · {FOUNDED}</p>
+  <p class="closing-tag">{t('home.tagline')}</p>
   <p class="closing-cipr">{t('home.cipr')}</p>
   <p class="closing-links">
     <a href={localePath(lang, 'entrar/')}>{t('home.cta')}</a>
+    <a href="#historia">{t('home.story.eyebrow')}</a>
     <a href="#capitulos">{t('home.chapters.title')}</a>
   </p>
 </section>

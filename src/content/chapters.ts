@@ -20,5 +20,10 @@ export const ZONAS = [
   { name: 'Tau', place: 'Tampa', year: 2015, florida: true },
 ];
 
-/* Each line's text is the copy key home.history.<year>. */
-export const HISTORY = [1928, 1941, 1944, 1946, 1949, 2007] as const;
+/* The story, in moments: each one's year, title and text are copy keys home.m.<key>.year|title|text
+   (from the Eta's anniversary yearbook; see docs/research.md). */
+export const MOMENTS = ['founding', 'casa', 'lema', 'himno', 'baile', 'omega', 'sister'] as const;
+export const VALUES = ['serve', 'inspire', 'lead'] as const;
+export const TRADITIONS = ['convencion', 'medalla', 'copa', 'sorora', 'baile', 'juegos'] as const;
+export const FOUNDED = 1928;
+export const CENTENARY = 2028;

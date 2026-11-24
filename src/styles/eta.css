@@ -302,3 +302,65 @@ footer { border-top: 0; }
 .hero { min-height: min(calc(100svh - 2.2rem), 62rem); }
 .hero-bar { margin-bottom: 1.5rem; }
 .hero-body { padding-bottom: 2rem; }
+
+/* ---------- Homepage, in the Eta's voice ---------- */
+.center { text-align: center; justify-content: center; }
+.hero-body { position: relative; }
+.hero-bud { margin: -.2rem 0 -.6rem; filter: drop-shadow(0 6px 14px rgb(0 0 0 / .35)); }
+.tagline { font: italic 500 clamp(1.25rem, 3.2vw, 1.75rem)/1.35 var(--serif); color: var(--gold-br); max-width: 36rem; margin: -.2rem 0 1rem; }
+.hero-lead { font-size: clamp(1rem, 2.3vw, 1.12rem); }
+.badge-ring { position: absolute; right: 0; top: 0; width: 150px; height: 150px; display: none; animation: spin 40s linear infinite; }
+@media (min-width: 980px) { .badge-ring { display: block; } }
+.badge-ring text { fill: var(--gold-br); font: 600 11.5px var(--sans); letter-spacing: .22em; text-transform: uppercase; }
+.badge-ring .badge-num { font: 600 40px var(--serif); letter-spacing: 0; animation: spin 40s linear infinite reverse; transform-origin: 100px 100px; font-variant-numeric: lining-nums; }
+.badge-ring .badge-unit { font: 600 11px var(--sans); letter-spacing: .2em; animation: spin 40s linear infinite reverse; transform-origin: 100px 100px; }
+@keyframes spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .badge-ring, .badge-ring text { animation: none !important; } }
+.stats dt { white-space: normal; }
+
+.story { background: var(--bg); }
+.story-intro { position: relative; }
+@media (min-width: 860px) { .story-intro { position: sticky; top: 2.5rem; } }
+.quote { margin: 2rem 0 0; display: flex; gap: .8rem; align-items: center; }
+.quote p { margin: 0; font: italic 600 clamp(1.5rem, 4vw, 2.1rem)/1.15 var(--serif); color: var(--purple); }
+.moments { list-style: none; margin: 0; padding: 0; display: grid; gap: 1rem; counter-reset: m; }
+.moment { position: relative; background: #fff; border: 1px solid var(--line); border-radius: var(--radius); padding: 1.15rem 1.25rem 1.1rem 1.25rem; box-shadow: var(--shadow); }
+.moment::before { content: ''; position: absolute; left: 0; top: 1.2rem; bottom: 1.2rem; width: 3px; border-radius: 3px; background: var(--gold); }
+.moment-year { font: 600 .76rem var(--sans); letter-spacing: .16em; text-transform: uppercase; color: var(--gold-ink); font-variant-numeric: lining-nums; }
+.moment h3 { margin: .2rem 0 .35rem; font-size: 1.6rem; }
+.moment p { margin: 0; color: var(--muted); }
+.moment.founding, .moment.sister { background: linear-gradient(160deg, var(--purple), var(--purple-dk)); border-color: transparent; }
+.moment.founding h3, .moment.sister h3 { color: #fff; }
+.moment.founding p, .moment.sister p { color: #ddd0ee; }
+.moment.founding .moment-year, .moment.sister .moment-year { color: var(--gold-br); }
+
+.values { background: #fff; }
+.value-list { list-style: none; margin: 2.2rem 0 0; padding: 0; display: grid; gap: 1rem; }
+@media (min-width: 820px) { .value-list { grid-template-columns: repeat(3, 1fr); gap: 1.25rem; } }
+.value { text-align: center; padding: 2rem 1.4rem 1.6rem; border-radius: 20px; background:
+  radial-gradient(18rem 8rem at 50% 0%, rgb(226 193 90 / .16), transparent 70%), var(--purple-lt); }
+.value-num { display: grid; place-items: center; width: 64px; height: 64px; margin: 0 auto .9rem; border-radius: 50%;
+  background: linear-gradient(160deg, var(--purple), var(--purple-dk)); color: var(--gold-br); font: 700 1.9rem var(--serif);
+  box-shadow: 0 0 0 4px #fff, 0 0 0 5px var(--gold); }
+.value h3 { font-size: 1.7rem; }
+.value p { margin: 0; color: var(--muted); }
+.trad-title { text-align: center; margin: 3rem 0 1.1rem; }
+.traditions { list-style: none; margin: 0; padding: 0; display: grid; gap: .7rem; grid-template-columns: 1fr; }
+@media (min-width: 640px) { .traditions { grid-template-columns: 1fr 1fr; } }
+@media (min-width: 980px) { .traditions { grid-template-columns: repeat(3, 1fr); } }
+.tradition { display: grid; gap: .15rem; padding: .95rem 1.1rem; border-radius: 14px; border: 1px dashed var(--gold); background: var(--gold-lt); }
+.tradition strong { font: 600 1.2rem var(--serif); color: var(--purple-dk); }
+.tradition span { font-size: .92rem; color: var(--gold-ink); }
+
+.centenary { text-align: center; padding: 4.5rem 1.25rem 4rem; background:
+  radial-gradient(40rem 16rem at 50% 0%, rgb(201 162 39 / .18), transparent 70%), var(--gold-lt); }
+.centenary .eyebrow { margin-top: .6rem; }
+.cent-years { margin: 0; font: 600 clamp(2.4rem, 9vw, 4.6rem)/1 var(--serif); color: var(--purple-dk); font-variant-numeric: lining-nums; }
+.cent-text { margin: .8rem auto 2.4rem; max-width: 28rem; color: var(--gold-ink); font-size: 1.08rem; }
+.centenary .motto-big { font-size: clamp(2rem, 7vw, 3.4rem); }
+.closing-tag { margin: 0 auto .6rem; max-width: 28rem; font: italic 500 1.1rem var(--serif); color: var(--purple); }
+.hero-body { width: 100%; }
+.badge-ring { right: 0; top: 1rem; }
+.eyebrow span { white-space: nowrap; }
+@media (max-width: 480px) { .eyebrow { letter-spacing: .14em; gap: .55rem; } .eyebrow::before, .eyebrow::after { width: 1.1rem; } }
+.badge-circle { fill: rgb(255 255 255 / .04); stroke: rgb(226 193 90 / .45); stroke-width: 1; }
