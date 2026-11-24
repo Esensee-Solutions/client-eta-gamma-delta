@@ -1,7 +1,7 @@
 /* /directorio/administrar/: the boards' tools. A chapter or Zona board sees its own sisters; the
    Directiva General sees everyone. The database refuses anything outside a board's reach, so
    this page only offers what it will accept. */
-import { app, base, db, groupName, groups, h, header, isBoard, isGeneral, run, say, signedIn, toast, type Group, type Me } from './app';
+import { app, avatar, base, db, groupName, groups, h, header, isBoard, isGeneral, photoUrls, run, say, signedIn, toast, type Group, type Me } from './app';
 import { DEMO } from './demo';
 
 run(async () => {
@@ -18,10 +18,10 @@ run(async () => {
   const addForm = addSister(() => current, draw);
 
   app().replaceChildren(
-    h('h1', {}, say('dir.admin.title')),
+    h('h1', { class: 'page-title' }, say('dir.admin.title')),
     h('p', { class: 'lead' }, say('dir.admin.lead', { scope: isGeneral(me) ? say('dir.admin.everything') : mine.map((g) => g.name).join(', ') })),
-    h('div', { class: 'filters' },
-      h('label', { for: 'group' }, say('dir.admin.group')), picker,
+    h('div', { class: 'admin-tools' },
+      h('div', { class: 'field' }, h('label', { for: 'group' }, say('dir.admin.group')), picker),
       h('button', { type: 'button', class: 'button ghost', onclick: () => exportCsv(me, all) }, say('dir.admin.export'))),
     list,
     addForm,
@@ -29,10 +29,11 @@ run(async () => {
 
   async function draw() {
     const [{ data: people, error }, { data: boards }] = await Promise.all([
-      db.from('members').select('id, first_name, last_name, email, position, user_id').eq('group_id', current).order('last_name'),
+      db.from('members').select('id, first_name, last_name, email, position, user_id, photo_at').eq('group_id', current).order('last_name'),
       db.from('admins').select('id, member_id, group_id').eq('group_id', current),
     ]);
     if (error) throw error;
+    const photos = await photoUrls(people ?? []);
     const boardOf = new Map((boards ?? []).map((b) => [b.member_id, b.id]));
     list.replaceChildren(h('ul', { class: 'rows' }, ...(people ?? []).map((p) => {
       const name = `${p.first_name} ${p.last_name}`;
@@ -47,9 +48,9 @@ run(async () => {
         ...all.filter((g) => g.id !== current).map((g) => h('option', { value: g.id }, g.name)));
       const boardId = boardOf.get(p.id);
       return h('li', { class: 'row' },
-        h('div', { class: 'who' },
+        h('div', { class: 'row-who' }, avatar(p.first_name, p.last_name, false, photos.get(p.id)), h('div', { class: 'who' },
           h('a', { href: `${base}directorio/hermana/?id=${p.id}` }, h('strong', {}, name)),
-          h('span', { class: 'muted small' }, [p.position, boardId && say('dir.admin.board'), !p.user_id && say('dir.admin.nologin')].filter(Boolean).join(' · '))),
+          h('span', { class: 'muted small' }, [p.position, boardId && say('dir.admin.board'), !p.user_id && say('dir.admin.nologin')].filter(Boolean).join(' · ')))),
         h('div', { class: 'row-actions' },
           h('a', { class: 'button small ghost', href: `${base}directorio/mi-perfil/?id=${p.id}` }, say('dir.admin.edit')),
           move,

@@ -1,5 +1,5 @@
 /* /directorio/hermana/?id=…: one page that fills itself in with whichever sister was chosen. */
-import { app, avatar, base, db, groupName, groups, h, header, run, say, showDate, showPhone, signedIn } from './app';
+import { app, avatar, base, db, groupName, groups, h, header, photoUrls, run, say, showDate, showPhone, signedIn } from './app';
 
 run(async () => {
   const me = await signedIn();
@@ -11,14 +11,13 @@ run(async () => {
   const back = h('a', { class: 'back', href: `${base}directorio/` }, say('dir.profile.back'));
   if (!s) return app().replaceChildren(back, h('p', { class: 'notice' }, say('dir.profile.notfound')));
 
+  const photo = (await photoUrls([s])).get(s.id);
   document.title = `${s.first_name} ${s.last_name} | Eta Gamma Delta`;
   const digits = s.phone ? s.phone.replace(/\D/g, '').slice(-10) : '';
   const row = (key: string, value: Node | string | null) =>
     value ? h('div', { class: 'fact' }, h('dt', {}, say(key)), h('dd', {}, value)) : null;
   const facts = [
-    row('dir.f.group', groupName(all, s.group_id)),
     row('dir.f.pledge_class', s.pledge_class),
-    row('dir.f.position', s.position),
     row('dir.f.major', s.major),
     row('dir.f.grad_year', s.grad_year && String(s.grad_year)),
     row('dir.f.employer', s.employer),
@@ -34,11 +33,17 @@ run(async () => {
   app().replaceChildren(
     back,
     h('article', { class: 'profile' },
+      h('div', { class: 'profile-banner' }),
+      h('div', { class: 'profile-body' },
       h('header', { class: 'profile-head' },
-        avatar(s.first_name, s.last_name, true),
+        avatar(s.first_name, s.last_name, true, photo),
         h('div', {},
           h('h1', {}, `${s.first_name} ${s.last_name}`),
-          h('p', { class: 'muted' }, say(`dir.status.${s.status}`)),
+          h('span', { class: 'pills' },
+            h('span', { class: s.group_id.startsWith('zona-') ? 'pill zona' : 'pill' }, groupName(all, s.group_id)),
+            h('span', { class: 'pill' }, say(`dir.status.${s.status}`)),
+            s.position && h('span', { class: 'pill role' }, s.position),
+          ),
         ),
       ),
       digits && h('div', { class: 'actions' },
@@ -49,6 +54,7 @@ run(async () => {
       h('dl', { class: 'facts' }, ...facts),
       someHidden && h('p', { class: 'muted small' }, say('dir.profile.hidden')),
       s.can_edit && h('a', { class: 'button ghost', href: `${base}directorio/mi-perfil/${s.is_me ? '' : `?id=${s.id}`}` }, say('dir.profile.edit')),
+      ),
     ),
   );
 });

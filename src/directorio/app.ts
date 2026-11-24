@@ -83,7 +83,7 @@ export function header(me: Me, current: 'list' | 'me' | 'admin' | 'none') {
   );
   const bar = document.getElementById('dir-header')!;
   bar.replaceChildren(
-    h('a', { class: 'dir-brand', href: `${base}directorio/` }, say('dir.brand')),
+    h('a', { class: 'dir-brand', href: `${base}directorio/` }, h('span', { class: 'badge', 'aria-hidden': 'true' }, 'ΗΓΔ'), say('dir.nav.list')),
     nav,
   );
 }
@@ -97,11 +97,38 @@ export function initials(first: string, last: string) {
   return (first[0] + (last[0] ?? '')).toUpperCase();
 }
 
-/** A sister's round initials, coloured from her name so each looks different. */
-export function avatar(first: string, last: string, big = false) {
+/** A sister's photo, or her initials in a circle until she adds one. */
+export function avatar(first: string, last: string, big = false, photo?: string) {
+  const cls = big ? 'avatar big' : 'avatar';
+  if (photo) return h('img', { class: cls, src: photo, alt: '', loading: 'lazy', decoding: 'async' });
   let n = 0;
   for (const c of first + last) n = (n * 31 + c.charCodeAt(0)) % 360;
-  return h('span', { class: big ? 'avatar big' : 'avatar', style: `--hue:${n}`, 'aria-hidden': 'true' }, initials(first, last));
+  return h('span', { class: cls, style: `--hue:${n}`, 'aria-hidden': 'true' }, initials(first, last));
+}
+
+/* Photos live in a private bucket, one '<member id>.jpg' each. A page asks for short-lived
+   links to the ones it shows. */
+export const photoPath = (id: string) => `${id}.jpg`;
+export async function photoUrls(rows: { id: string; photo_at: string | null }[]): Promise<Map<string, string>> {
+  const withPhoto = rows.filter((r) => r.photo_at);
+  if (!withPhoto.length) return new Map();
+  const { data } = await db.storage.from('fotos').createSignedUrls(withPhoto.map((r) => photoPath(r.id)), 60 * 60);
+  const urls = new Map<string, string>();
+  (data ?? []).forEach((d, i) => d.signedUrl && urls.set(withPhoto[i].id, d.signedUrl));
+  return urls;
+}
+
+/** A phone photo, cropped to a centred square and shrunk to a small JPEG (about 100 KB). */
+export async function squareJpeg(file: File, size = 640): Promise<Blob> {
+  const img = await createImageBitmap(file);
+  const side = Math.min(img.width, img.height);
+  const out = Math.min(size, side);
+  const canvas = document.createElement('canvas');
+  canvas.width = canvas.height = out;
+  canvas.getContext('2d')!.drawImage(img, (img.width - side) / 2, (img.height - side) / 2, side, side, 0, 0, out, out);
+  return new Promise((resolve, reject) =>
+    canvas.toBlob((b) => (b ? resolve(b) : reject(new Error('photo'))), 'image/jpeg', 0.85),
+  );
 }
 
 export function showPhone(p: string) {
