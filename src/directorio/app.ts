@@ -7,7 +7,8 @@ import { createClient, type SupabaseClient } from '@supabase/supabase-js';
 import { SUPABASE_KEY, SUPABASE_URL } from './config';
 
 export const db: SupabaseClient = createClient(SUPABASE_URL, SUPABASE_KEY, {
-  auth: { persistSession: true, detectSessionInUrl: true, flowType: 'pkce' },
+  // 'implicit': the link in the email signs her in on whatever phone she opens it, invitation or sign-in link alike.
+  auth: { persistSession: true, detectSessionInUrl: true, flowType: 'implicit' },
 });
 
 /* The page's copy, put there by DirPage.astro from src/content/site.ts. */

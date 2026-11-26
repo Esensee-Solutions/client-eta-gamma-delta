@@ -2,5 +2,5 @@
    lets a browser ask, and the database's own rules (supabase/migrations/) decide what each
    signed-in sister may see or change. Never put a secret key here. */
 
-export const SUPABASE_URL = 'https://yetacbzysnzforfxobem.supabase.co';
-export const SUPABASE_KEY = 'sb_publishable_4Dx1ddZmDjeuH60oSW9P9Q_ES7YnB2I';
+export const SUPABASE_URL = 'https://impxoowvtpljoxbojdir.supabase.co';
+export const SUPABASE_KEY = 'sb_publishable_2cJpI3Bk9hI2rgz8GHr49A_F0QCY8kH';

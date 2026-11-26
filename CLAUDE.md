@@ -104,16 +104,19 @@ Nothing about any sister is ever in a built file.
 ### Demo only, to remove before real sisters are added
 
 - `src/directorio/demo.ts`, the "entra como…" buttons on `/entrar/` and the DEMO line on the homepage.
-- The demo database (`eta-directorio-demo`, Estable owner's personal Supabase org, free plan;
+- The demo database (`eta-directorio-demo`, project `impxoowvtpljoxbojdir` in scasellas's Supabase org, free plan;
   pauses after a week unused). The real one goes on Pro in an org under the LLC.
 - `supabase/seed-demo.sql` (made-up sisters; `node scripts/demo-seed.mjs` writes it, running it
   resets the demo) and the three demo sign-ins.
 
 ### Still to build for the real directory
 
-- Sending the invitation email when a board adds a sister (a small Supabase function using the
-  invite, so the secret key stays server-side). The demo adds her and sends nothing.
-- Sign-in emails through GoHighLevel's LC Email SMTP, in Spanish and English, and the Supabase
-  Site URL and redirect addresses set to the real domain (the email link doesn't work until then).
+- Emails are built: the `invitar` function (`supabase/functions/invitar/`) sends a sister her
+  invitation, or a sign-in link if she already has an account, after `can_invite` says the caller
+  runs her chapter or Zona. The Spanish templates are `supabase/emails/`, pasted into Supabase.
+  Supabase sends them through custom SMTP: the demo uses Estable's Google Workspace (an app
+  password); the real directory moves to GoHighLevel's LC Email SMTP (a dedicated sending domain
+  in GHL, its SMTP credentials pasted into Supabase), and the real domain goes into Supabase's
+  Site URL and Redirect URLs. Changing sender is a Supabase setting, not code.
 - The design from the brief, and loading the Eta's real list. (Photos are built: private
   bucket `fotos`, one `<member id>.jpg` each, rules in `supabase/migrations/…_fotos.sql`.)
