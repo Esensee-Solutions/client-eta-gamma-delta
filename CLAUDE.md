@@ -104,7 +104,7 @@ Nothing about any sister is ever in a built file.
 ### Demo only, to remove before real sisters are added
 
 - `src/directorio/demo.ts`, the "entra como…" buttons on `/entrar/` and the DEMO line on the homepage.
-- The demo database (`eta-directorio-demo`, Estable owner's personal Supabase org, free plan;
+- The demo database (`eta-directorio-demo`, project `impxoowvtpljoxbojdir` in scasellas's Supabase org, free plan;
   pauses after a week unused). The real one goes on Pro in an org under the LLC.
 - `supabase/seed-demo.sql` (made-up sisters; `node scripts/demo-seed.mjs` writes it, running it
   resets the demo) and the three demo sign-ins.
