@@ -114,7 +114,9 @@ Nothing about any sister is ever in a built file.
 - Emails are built: the `invitar` function (`supabase/functions/invitar/`) sends a sister her
   invitation, or a sign-in link if she already has an account, after `can_invite` says the caller
   runs her chapter or Zona. The Spanish templates are `supabase/emails/`, pasted into Supabase.
-  The demo sends through Estable's Resend; the real directory moves to GoHighLevel's LC Email
-  SMTP and the real domain in Supabase's Site URL and Redirect URLs.
+  Supabase sends them through custom SMTP: the demo uses Estable's Google Workspace (an app
+  password); the real directory moves to GoHighLevel's LC Email SMTP (a dedicated sending domain
+  in GHL, its SMTP credentials pasted into Supabase), and the real domain goes into Supabase's
+  Site URL and Redirect URLs. Changing sender is a Supabase setting, not code.
 - The design from the brief, and loading the Eta's real list. (Photos are built: private
   bucket `fotos`, one `<member id>.jpg` each, rules in `supabase/migrations/…_fotos.sql`.)

@@ -9,7 +9,8 @@ the site: paste each into **Authentication → Emails → Templates** in the Sup
 | **Magic link** (she asks to sign in) | `Tu enlace para entrar al directorio` | `enlace.html` |
 
 They go out through Supabase's custom SMTP (Authentication → Emails → SMTP settings). The demo
-uses Estable's Resend account; the real directory will use GoHighLevel's LC Email.
+uses Estable's Google Workspace (smtp.gmail.com, port 465, an app password); the real directory
+will use GoHighLevel's LC Email (a dedicated sending domain in GHL, then its SMTP credentials).
 
 The invitation is sent by the `invitar` function (`supabase/functions/invitar/`), which checks the
 board may invite her first. Links come back to the site only if its address is in
