@@ -19,7 +19,11 @@ run(async () => {
           // Only sisters a board already added can sign in; nobody signs herself up.
           options: { shouldCreateUser: false, emailRedirectTo: `${location.origin}${base}directorio/` },
         });
-        sent.textContent = error ? say('dir.notmember') : say('dir.login.sent');
+        sent.textContent = !error
+          ? say('dir.login.sent')
+          : error.status === 429
+            ? say('dir.login.wait')
+            : say('dir.notmember');
         sent.hidden = false;
       },
     },

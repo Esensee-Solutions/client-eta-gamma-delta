@@ -161,6 +161,15 @@ test('photos: she and her board can change hers; nobody else can; only sisters c
   await gone(isabelBeta.id);
 });
 
+test('only her board or the Directiva General may send a sister her invitation', async () => {
+  const may = async (c, m) => (await rows(c.rpc('can_invite', { p_member: m.id })));
+  assert.equal(await may(hermana, isabelBeta), false, 'a sister');
+  assert.equal(await may(directiva, isabelBeta), true, "Beta's board, a Beta sister");
+  assert.equal(await may(directiva, patriciaAlpha), false, "Beta's board, an Alpha sister");
+  assert.equal(await may(general, patriciaAlpha), true, 'the Directiva General');
+  await fails(anon.rpc('can_invite', { p_member: isabelBeta.id }), 'asking without signing in');
+});
+
 function byId(list, id) {
   return list.find((m) => m.id === id);
 }

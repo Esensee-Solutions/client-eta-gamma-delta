@@ -2,7 +2,6 @@
    Directiva General sees everyone. The database refuses anything outside a board's reach, so
    this page only offers what it will accept. */
 import { app, avatar, base, db, groupName, groups, h, header, isBoard, isGeneral, photoUrls, run, say, signedIn, toast, type Group, type Me } from './app';
-import { DEMO } from './demo';
 
 run(async () => {
   const me = await signedIn();
@@ -53,6 +52,13 @@ run(async () => {
           h('span', { class: 'muted small' }, [p.position, boardId && say('dir.admin.board'), !p.user_id && say('dir.admin.nologin')].filter(Boolean).join(' · ')))),
         h('div', { class: 'row-actions' },
           h('a', { class: 'button small ghost', href: `${base}directorio/mi-perfil/?id=${p.id}` }, say('dir.admin.edit')),
+          p.email && h('button', { type: 'button', class: 'button small ghost', onclick: async (e: Event) => {
+            const b = e.currentTarget as HTMLButtonElement;
+            b.disabled = true;
+            await invite(p.id);
+            b.disabled = false;
+            draw();
+          } }, say(p.user_id ? 'dir.admin.resend' : 'dir.admin.invite')),
           move,
           h('button', { type: 'button', class: 'button small ghost', onclick: async () => {
             const { error } = boardId
@@ -80,17 +86,15 @@ function addSister(group: () => string, done: () => void) {
   const form = h('form', { class: 'card stack', onsubmit: async (e: Event) => {
     e.preventDefault();
     const f = new FormData(form as HTMLFormElement);
-    const { error } = await db.from('members').insert({
+    const { data: added, error } = await db.from('members').insert({
       first_name: String(f.get('first_name')).trim(),
       last_name: String(f.get('last_name')).trim(),
       email: String(f.get('email')).trim().toLowerCase(),
       group_id: group(),
       status: group().startsWith('zona-') ? 'alumna' : 'activa',
-    });
-    if (error) return toast(say('dir.error'));
-    // The real directory sends her invitation here (a small server function with Supabase's
-    // invite). The demo sends nothing.
-    toast(DEMO ? say('dir.admin.added') : say('dir.me.saved'));
+    }).select('id').single();
+    if (error) return toast(say(error.code === '23505' ? 'dir.admin.exists' : 'dir.error'));
+    await invite(added.id);
     (form as HTMLFormElement).reset();
     done();
   } },
@@ -100,6 +104,16 @@ function addSister(group: () => string, done: () => void) {
     h('button', { type: 'submit', class: 'button' }, say('dir.admin.add.button')),
   );
   return form;
+}
+
+/** Emails her the way in: an invitation if she has never signed in, otherwise a sign-in link.
+    The `invitar` function checks this board may invite her before it sends anything. */
+async function invite(member: string) {
+  const { data, error } = await db.functions.invoke('invitar', {
+    body: { member, redirectTo: `${location.origin}${base}directorio/` },
+  });
+  if (error || !data?.sent) return toast(say('dir.admin.sendfail'));
+  toast(say(data.sent === 'invite' ? 'dir.admin.invited' : 'dir.admin.linksent', { email: data.email }));
 }
 
 /** Everyone this board runs, as a file Excel opens. */
